@@ -1,0 +1,216 @@
+package gui.buyer.tab;
+
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import gui.seller.tab.sellerCallingPlanTab;
+import gui.tab.*;
+import buyer.*;
+import phone.*;
+import callingplan.*;
+
+public class buyerTab extends AbstractTabPanel {
+	private DefaultListModel listModel;
+	private JList list;
+
+	private int step = 0; // 0 = 폰 안고른상태, 1 = 폰 고르고 요금제 안고른상태
+
+	private Phone phonetemp;
+	private CallingPlan callingplantemp;
+	private Phone SelectedPhone;
+	private CallingPlan SelectedCallingPlan;
+
+	private PhoneRec phonerec;
+	private CallingPlanRec callingplanrec;
+
+	private int offset = 1;
+	
+	final List<Phone> itemlistP = new ArrayList<>();
+	final List<CallingPlan> itemlistC = new ArrayList<>();
+
+	public buyerTab(Buyer buyer) {
+		super();
+
+		Phone_List phonelist = new Phone_List(2);
+		CallingPlan_List callingplanlist = new CallingPlan_List(2);
+		
+		phonetemp = new Phone("없음", "", "", "", "", "", "", "");
+		itemlistP.add(phonetemp);
+		phonetemp = new Phone("변경안함", "", "", "", "", "", "", "");
+		itemlistP.add(phonetemp);
+		for (int i = 0; i < phonelist.Get_Total_Phone_List_Size(); i++)
+			itemlistP.add(phonelist.getTotal_phone_list().get(i));
+
+		// GUI part
+		JLabel lblTitle = new JLabel("Phone List");
+		lblTitle.setFont(new Font("맑은 고딕", Font.BOLD, 30));
+		lblTitle.setBounds(40, 33, 240, 40);
+		add(lblTitle);
+
+		// Scroll 가능한 List 보여주는 객체 생성 (ScrollPane 안에 JList 넣음
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(40, 150, 530, 425);
+		add(scrollPane);
+
+		// Listmodel 생성 (List의 element에 대한 정보를 지님)
+		listModel = new DefaultListModel();
+		for (Phone element : itemlistP) {
+			listModel.addElement(element.getMODEL_NAME());
+		}
+		// Listmodel을 연결한 JList 생성하고 Scroll 가능한 Panel에 추가
+		list = new JList(listModel);
+		scrollPane.setViewportView(list);
+
+		JButton btnSelect = new JButton("Select");
+		btnSelect.setBounds(637, 300, 181, 45);
+		add(btnSelect);
+		btnSelect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int index = list.getSelectedIndex();
+				if (index < 0)
+					return;
+				if (step == 0 && index >= itemlistP.size())
+					return;
+				if (step == 1 && index >= itemlistC.size())
+					return;
+				if (index != 0) // 생각한걸 바로 고를때
+				{
+					if (step == 0) {
+						step++;
+						lblTitle.setText("CallinPlan List");
+						SelectedPhone = new Phone(itemlistP.get(index));
+
+						callingplantemp = new CallingPlan("없음", "", "", "", "");
+						itemlistC.add(callingplantemp);
+						callingplantemp = new CallingPlan("변경안함", "", "", "", "");
+						itemlistC.add(callingplantemp);
+						for (int i = 0; i < callingplanlist.Get_Total_CallingPlan_List_Size(); i++)
+							itemlistC.add(callingplanlist.getTotal_CallingPlan_list().get(i));
+						updateListC();
+						offset = 1;
+					} else 
+					{
+						SelectedCallingPlan = new CallingPlan(itemlistC.get(index));
+						System.out.println(SelectedPhone.getMODEL_NAME());
+						System.out.println(SelectedCallingPlan.getPAY_NAME());
+						System.exit(0);
+					}
+				} else // 추천으로 들어감
+				{
+					listModel.clear();
+					if (step == 0) // 기종 추천
+					{
+						String DISPLAY = "", STORAGE = "", PRICE = "", PERFORMANCE = "", MANUFACTURE = "";
+
+						DISPLAY = JOptionPane.showInputDialog(buyerTab.this, "DISPLAY");
+						if (DISPLAY != null) {
+							STORAGE = JOptionPane.showInputDialog(buyerTab.this, "STORAGE");
+							if (STORAGE != null) {
+								PRICE = JOptionPane.showInputDialog(buyerTab.this, "PRICE");
+								if (PRICE != null) {
+									PERFORMANCE = JOptionPane.showInputDialog(buyerTab.this, "PERFORMANCE");
+									if (PERFORMANCE != null) {
+										MANUFACTURE = JOptionPane.showInputDialog(buyerTab.this, "MANUFACTURE");
+										if (MANUFACTURE != null) {
+											itemlistP.clear();
+											phonerec = new PhoneRec(DISPLAY, STORAGE, PRICE, PERFORMANCE, MANUFACTURE);
+											phonerec.checkInterval(offset);
+											phonetemp = new Phone("없음", "", "", "", "", "", "", "");
+											itemlistP.add(phonetemp);
+											for (int i = 0; i < phonerec.getRecommandlist().size(); i++)
+												itemlistP.add(phonerec.getRecommandlist().get(i));
+											updateListP();
+											offset++;
+										}
+									}
+								}
+							}
+						}
+					} else // 요금제 추천
+					{
+						String MESSAGE = "", CALL = "", DATA = "", PRICE = "";
+
+						MESSAGE = JOptionPane.showInputDialog(buyerTab.this, "MESSAGE");
+						if (MESSAGE != null) {
+							CALL = JOptionPane.showInputDialog(buyerTab.this, "CALL");
+							if (CALL != null) {
+								DATA = JOptionPane.showInputDialog(buyerTab.this, "DATA");
+								if (DATA != null) {
+									PRICE = JOptionPane.showInputDialog(buyerTab.this, "PRICE");
+									if (PRICE != null) {
+										itemlistC.clear();
+										callingplanrec = new CallingPlanRec(MESSAGE, CALL, DATA, PRICE);
+										callingplanrec.checkInterval(offset);
+										callingplantemp = new CallingPlan("없음", "", "", "", "");
+										itemlistC.add(callingplantemp);
+										for (int i = 0; i < callingplanrec.getRecommandlist().size(); i++)
+											itemlistC.add(callingplanrec.getRecommandlist().get(i));
+										updateListC();
+										offset++;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+		
+		list.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evt) {
+				JList list = (JList) evt.getSource();
+
+				// Double-click일 경우
+				if (evt.getClickCount() == 2) {
+					// 클릭된 Index 가져옴
+					int index = list.locationToIndex(evt.getPoint());
+					if (index < 0)
+						return;
+					if (step == 0 && index >= itemlistP.size())
+						return;
+					additionalFrame additional;
+					
+					if(step == 0)
+						additional = new additionalFrame(itemlistP.get(index));
+					else if(step == 1)
+						additional = new additionalFrame(itemlistC.get(index));
+				}
+			}
+		});
+	}
+
+	private void updateListP() {
+		listModel.clear();
+		for (Phone element : itemlistP) {
+			listModel.addElement(element.getMODEL_NAME());
+		}
+	}
+
+	private void updateListC() {
+		listModel.clear();
+		for (CallingPlan element : itemlistC) {
+			listModel.addElement(element.getPAY_NAME());
+		}
+	}
+}

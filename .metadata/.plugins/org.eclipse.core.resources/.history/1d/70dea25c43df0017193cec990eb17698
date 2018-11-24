@@ -1,0 +1,138 @@
+package gui.buyer.tab;
+
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import gui.tab.*;
+import buyer.*;
+import phone.*;
+import callingplan.*;
+
+public class buyerTab extends AbstractTabPanel {
+	private DefaultListModel listModel;
+	private JList list;
+
+	private int count = 0;
+	
+	private Phone SelectedPhone;
+	private CallingPlan SelectedCallingPlan;
+	
+	final List<Phone> itemlistP = new ArrayList<>();
+	final List<CallingPlan> itemlistC = new ArrayList<>();
+	
+	public buyerTab(Buyer buyer) {
+		super();
+				
+		Phone phonetemp;
+		CallingPlan callingplantemp = new CallingPlan("없음", "", "", "", "");
+		
+		Phone_List phonelist = new Phone_List(2);
+		CallingPlan_List callingplanlist = new CallingPlan_List(2);
+		
+		phonetemp = new Phone("없음", "", "", "", "", "", "", "");
+		itemlistP.add(phonetemp);
+		phonetemp = new Phone("변경안함", "", "", "", "", "", "", "");
+		
+		for (int i = 0; i < phonelist.Get_Total_Phone_List_Size(); i++)
+			itemlistP.add(phonelist.getTotal_phone_list().get(i));
+
+		// GUI part
+		JLabel lblTitle = new JLabel("Phone List");
+		lblTitle.setFont(new Font("맑은 고딕", Font.BOLD, 30));
+		lblTitle.setBounds(40, 33, 240, 40);
+		add(lblTitle);
+
+		// Scroll 가능한 List 보여주는 객체 생성 (ScrollPane 안에 JList 넣음
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(40, 150, 530, 425);
+		add(scrollPane);
+
+		// Listmodel 생성 (List의 element에 대한 정보를 지님)
+		listModel = new DefaultListModel();
+		for (Phone element : itemlistP) {
+			listModel.addElement(element.getMODEL_NAME());
+		}
+		// Listmodel을 연결한 JList 생성하고 Scroll 가능한 Panel에 추가
+		list = new JList(listModel);
+		scrollPane.setViewportView(list);
+		
+		JButton btnSelect = new JButton("Select");
+		btnSelect.setBounds(637, 300, 181, 45);
+		add(btnSelect);
+		btnSelect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println(count);
+				int index = list.getSelectedIndex();
+				if (index < 0)
+					return;
+				if (index >= itemlistP.size())
+					return;
+				if (index != 0) {
+					count++;
+					SelectedPhone = new Phone(itemlistP.get(index));
+
+					// System.out.println(SelectedPhone.getMODEL_NAME());
+
+					lblTitle.setText("CallinPlan List");
+					itemlistC.add(callingplantemp);
+					for (int i = 0; i < callingplanlist.Get_Total_CallingPlan_List_Size(); i++)
+						itemlistC.add(callingplanlist.getTotal_CallingPlan_list().get(i));
+					updateListC();
+				} else 
+				{
+					
+				}
+			}
+		});
+	}
+
+	private void updateListP() {
+		listModel.clear();
+		for (Phone element : itemlistP) {
+			listModel.addElement(element.getMODEL_NAME());
+		}
+	}
+	private void updateListC() {
+		listModel.clear();
+		for (CallingPlan element : itemlistC) {
+			listModel.addElement(element.getPAY_NAME());
+		}
+	}
+	
+	public JList getList() {
+		return list;
+	}
+
+	public void setList(JList list) {
+		this.list = list;
+	}
+
+	public DefaultListModel getListModel() {
+		return listModel;
+	}
+
+	public void setListModel(DefaultListModel listModel) {
+		this.listModel = listModel;
+	}
+}

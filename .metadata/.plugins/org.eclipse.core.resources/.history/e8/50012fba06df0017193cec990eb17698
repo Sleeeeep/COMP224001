@@ -1,0 +1,76 @@
+package info;
+
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
+
+public class User implements Serializable 
+{
+	private String mode;	// S = seller, B = buyer
+	private String name;
+	private String ID, PW;
+	private String Market, Business;
+	
+	
+	public User() { }
+	
+	public User(String MODE, String NAME, String ID, String PW, String Market, String Business) 
+	{
+		setMode(MODE);
+		setName(NAME);
+		setID(ID);
+		setPW(PW);
+		setMarket(Market);
+		setBusiness(Business);
+	}
+
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getID() {
+		return ID;
+	}
+
+	public void setID(String iD) {
+		this.ID = iD;
+	}
+
+	public String getPW() {
+		return PW;
+	}
+
+	public void setPW(String pW) {
+		this.PW = pW;
+	}
+
+	public String getMarket() {
+		return Market;
+	}
+
+	public void setMarket(String market) {
+		this.Market = market;
+	}
+
+	public String getBusiness() {
+		return Business;
+	}
+
+	public void setBusiness(String business) {
+		this.Business = business;
+	}
+	
+	
+}

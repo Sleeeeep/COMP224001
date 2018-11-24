@@ -1,0 +1,130 @@
+package gui;
+
+import java.io.*;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.Enumeration;
+import java.util.Scanner;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
+
+import common.gui.AbstractFrame;
+import info.User;
+
+public class Gui_seller extends AbstractFrame
+{
+	private User user;
+	private String ID = "", PASSWD = "";
+	private JTextField tfID;
+	private JPasswordField tfPW;
+	
+	public Gui_seller() 
+	{
+		super(450, 270);
+
+		// 전체 Client UI의 폰트를 Times 일반, 크기는 20으로 설정
+        setUIFont(new FontUIResource(new Font("Times", Font.PLAIN, 20)));
+		
+		// 단순 Text 표시하는 객체(JLabel) 생성
+		JLabel lblID = new JLabel("ID");
+		lblID.setBounds(116, 55, 62, 18);
+		contentPane.add(lblID);
+		
+		JLabel lblPW = new JLabel("PW");
+		lblPW.setBounds(116, 95, 62, 18);
+		contentPane.add(lblPW);
+
+		
+		// Text 입력받을 수 있는 객체(JTextField) 생성
+		tfID = new JTextField();
+		tfID.setBounds(165, 49, 136, 30);
+		contentPane.add(tfID);
+		tfID.setColumns(10);
+		
+		tfPW = new JPasswordField();
+		tfPW.setBounds(165, 89, 136, 30);
+		contentPane.add(tfPW);
+		tfPW.setColumns(10);
+		
+		
+		// 로그인 및 회원가입 버튼(JButton) 표시
+		JButton btnSignin = new JButton("Sign in");
+		btnSignin.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				// 로그인 버튼이 눌렸을 때 수행
+				// TextField에서 입력된 ID와 PW를 가져와서 유저 객체 생성
+				String inputID = tfID.getText();
+				String inputPW = tfPW.getText();
+				user = new User(inputID, inputPW);
+				Scanner s = new Scanner(System.in);
+				try 
+				{
+					FileInputStream fin = new FileInputStream("SellerInfo");
+					Reader reader = new InputStreamReader(fin, "euc-kr"); 
+					BufferedReader in = new BufferedReader(reader);
+					char b;
+					while((b = (char) in.read()) != '\0')
+					{
+						ID += b;
+					}
+					
+					while((b = (char) in.read()) != '\0')
+					{
+						PASSWD += b;
+					}
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+				
+				if(ID.equals(inputID) == true && PASSWD.equals(inputPW) == true)
+				{
+					new MainFrame(user);
+					dispose();
+				}
+				else
+					JOptionPane.showMessageDialog(Gui_seller.this, "Invalid ID or PW", "Error", JOptionPane.ERROR_MESSAGE);
+				
+			}
+		});
+		
+		btnSignin.setBounds(82, 157, 105, 35);
+		contentPane.add(btnSignin);
+		
+		JButton btnRegister = new JButton("Register");
+		btnRegister.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				// 회원가입 버튼이 눌렸을 때 수행
+				// ID와 PW를 입력받을 Dialog를 띄움
+				String newID = JOptionPane.showInputDialog("Please input your ID.");
+				String newPW = JOptionPane.showInputDialog("Please input your Password");
+				user = new User(newID, newPW);
+			}
+		});
+		btnRegister.setBounds(212, 157, 130, 35);
+		contentPane.add(btnRegister);
+
+		
+		
+		
+		setVisible(true);
+	}
+	
+}

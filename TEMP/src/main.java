@@ -1,0 +1,12 @@
+import java.io.IOException;
+import java.util.*;
+import gui.LoginFrame;
+import gui.MainFrame;
+import gui.SelectFrame;
+
+public class main {
+	// test
+	public static void main(String[] args) throws IOException {
+		SelectFrame mainframe = new SelectFrame();
+	}
+}

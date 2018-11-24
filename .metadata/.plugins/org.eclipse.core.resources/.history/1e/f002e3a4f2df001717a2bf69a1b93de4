@@ -1,0 +1,46 @@
+package gui.buyer.tab;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.*;
+import callingplan.*;
+import phone.*;
+import common.*;
+import common.gui.AbstractFrame;
+
+public class additionalFrame extends AbstractFrame {
+	private Phone phone;
+	private CallingPlan callingplan;
+	private List<JLabel> LABEL = new ArrayList<>();
+	
+	public additionalFrame(Object datatype)
+	{
+		super(700, 600);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
+		if (datatype.getClass() == Phone.class)
+		{
+			phone = (Phone)datatype;
+			setTitle(phone.getMODEL_NAME());
+			LABEL.add(new JLabel());
+			
+			LABEL.get(0).setText("Model Name" + " : " + phone.getMODEL_NAME());
+			contentPane.add(LABEL.get(0));
+		}
+		else if (datatype.getClass() == CallingPlan.class)
+		{
+			callingplan = (CallingPlan)datatype;
+			setTitle(callingplan.getPAY_NAME());
+			LABEL.add(new JLabel("Pay Name" + " : " + callingplan.getPAY_NAME()));
+			
+			for(JLabel item : LABEL)
+				contentPane.add(item);
+		}
+		
+		
+		
+		setVisible(true);
+	}
+
+}

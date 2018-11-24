@@ -1,0 +1,60 @@
+1512906663787	Rename package 'Software_Design.bin.common.gui'
+1512906668242	Rename package 'Software_Design.bin.gui.tab'
+1512906675224	Rename package 'Software_Design.bin.gui'
+1512906681233	Rename package 'Software_Design.bin.info'
+1512906692653	Delete element
+1512906707434	Delete element
+1512906832415	Move folders
+1512907780596	Delete element
+1512907802548	Rename type 'Gui_seller'
+1512911238237	Encapsulate field 'name'
+1512911262522	Encapsulate field 'mode'
+1512911272274	Encapsulate field 'name'
+1512911275525	Encapsulate field 'ID'
+1512911278447	Encapsulate field 'PW'
+1512911280998	Encapsulate field 'Market'
+1512911284326	Encapsulate field 'Business'
+1512921506041	Copy compilation unit
+1512921519769	Rename type 'SearchTabPanel'
+1512922296579	Delete elements
+1512922861469	Move compilation units
+1512922896068	Move compilation units
+1512922911652	Move compilation units
+1512922920783	Move compilation unit
+1512923363449	Encapsulate field 'ID'
+1512923367080	Encapsulate field 'PW'
+1512924043051	Encapsulate field 'businessNumber'
+1513000209431	Rename package 'gui.tab'
+1513000236098	Copy package
+1513000249186	Delete element
+1513060258127	Delete element
+1513060475272	Encapsulate field 'mode'
+1513060487282	Encapsulate field 'name'
+1513060564515	Delete element
+1513061523171	Rename type 'PhoneTabPanel'
+1513061537134	Rename type 'CallingPlanTabPanel'
+1513061547234	Rename type 'CallingPlanTabPanel'
+1513061555703	Rename type 'PhoneTabPanel'
+1513061658637	Move compilation unit
+1513061662066	Delete element
+1513081864218	Rename type 'buyerPhoneTab'
+1513082859219	Delete element
+1513082937721	Delete element
+1513141613876	Rename type 'Recommand'
+1513141675468	Rename type 'callingplanRec'
+1513142423374	Encapsulate field 'Display'
+1513142427095	Encapsulate field 'Storage'
+1513142432371	Encapsulate field 'Price'
+1513142435939	Encapsulate field 'Performance'
+1513142439359	Encapsulate field 'Manufacture'
+1513142960820	Encapsulate field 'totallist'
+1513142965255	Encapsulate field 'itemlist'
+1513145007174	Encapsulate field 'Display'
+1513145016031	Encapsulate field 'Storage'
+1513145020070	Encapsulate field 'Price'
+1513146787103	Encapsulate field 'recommandlist'
+1513151765405	Delete element
+1513155726933	Encapsulate field 'Message'
+1513155729645	Encapsulate field 'Call'
+1513155734469	Encapsulate field 'Data'
+1513155757199	Encapsulate field 'Price'

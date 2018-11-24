@@ -1,0 +1,80 @@
+package buyer;
+
+import java.util.*;
+import callingplan.*;
+
+public class CallingPlanRec {
+	private CallingPlan_List totallist;
+	private ArrayList<CallingPlan> recommandlist;
+	
+	private int Message;
+	private int Call;
+	private int Data;
+	private int Price;
+	
+	public CallingPlanRec()
+	{
+		
+	}
+	public CallingPlanRec(String message, String call, String data, String price)
+	{
+		
+	}
+	public void checkInterval(int offset) // mf -> premium -> display -> storage -> price
+	{
+		int addcheck = 0;
+		while (offset < 10 && addcheck <= 2 && addcheck <= totallist.Get_Total_Phone_List_Size())
+		{
+			for (int i = 0; addcheck <= 2 && i < totallist.Get_Total_Phone_List_Size(); i++) {
+				Phone curPhone = new Phone(totallist.getTotal_phone_list().get(i));
+				if (checkManufacture(curPhone))
+					if (checkPerformance(curPhone))
+						if (checkDisplay(curPhone, offset))
+							if (checkStorage(curPhone, offset))
+								if (checkPrice(curPhone, offset)) {
+
+									if (recommandlist.contains(curPhone))
+										continue;
+
+									recommandlist.add(curPhone);
+									addcheck++;
+								}
+			}
+			offset++;
+		}
+
+	}
+
+	public int getMessage() {
+		return Message;
+	}
+	public void setMessage(String message) {
+		if ("".equals(message))
+			Message = 0;
+		Message = Integer.parseInt(message);
+	}
+	public int getCall() {
+		return Call;
+	}
+	public void setCall(String call) {
+		if ("".equals(call))
+			Call = 0;
+		Call = Integer.parseInt(call);
+	}
+	public int getData() {
+		return Data;
+	}
+	public void setData(String data) {
+		if ("".equals(data))
+			Data = 0;
+		Data = Integer.parseInt(data);
+	}
+	public int getPrice() {
+		return Price;
+	}
+	public void setPrice(String price) {
+		if ("".equals(price))
+			Price = 0;
+		Price = Integer.parseInt(price);
+	}
+}

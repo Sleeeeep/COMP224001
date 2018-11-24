@@ -1,0 +1,175 @@
+package buyer;
+
+import java.util.*;
+import phone.*;
+
+public class PhoneRec {
+	private Phone_List totallist;
+	private ArrayList<Phone> recommandlist;
+
+	
+	private double Display;
+	private int Storage;
+	private int Price;
+	private String Performance;
+	private String Manufacture;
+
+	public PhoneRec() {
+
+	}
+
+	public PhoneRec(String Display, String Storage, String Price, String Performance, String Manufacture) {
+		this.setDisplay(Display);
+		this.setStorage(Storage);
+		this.setPrice(Price);
+		this.setPerformance(Performance);
+		this.setManufacture(Manufacture);
+		totallist = new Phone_List(2);
+		recommandlist = new ArrayList<>();
+	}
+
+	public void checkInterval(int offset) // mf -> premium -> display -> storage -> price
+	{
+		int addcheck = 0;
+		while (offset < totallist.Get_Total_Phone_List_Size() && addcheck <= 2 && addcheck <= totallist.Get_Total_Phone_List_Size())
+		{
+			for (int i = 0; addcheck <= 2 && i < totallist.Get_Total_Phone_List_Size(); i++) {
+				Phone curPhone = new Phone(totallist.getTotal_phone_list().get(i));
+				if (checkManufacture(curPhone))
+					if (checkPerformance(curPhone))
+						if (checkDisplay(curPhone, offset))
+							if (checkStorage(curPhone, offset))
+								if (checkPrice(curPhone, offset)) {
+
+									if (!recommandlist.contains(curPhone))
+										continue;
+
+									recommandlist.add(curPhone);
+									addcheck++;
+								}
+			}
+			offset++;
+		}
+
+	}
+
+	public Boolean checkManufacture(Phone curPhone) {
+		if ("".equals(Manufacture))
+			return true;
+		else if (curPhone.getMANUFACTURE().equalsIgnoreCase(Manufacture))
+			return true;
+		else
+			return false;
+	}
+
+	public Boolean checkDisplay(Phone curPhone, int offset) // +- 0.1 * offset
+	{
+		if (Display == 0)
+			return true;
+		double curDisplay = Double.parseDouble(curPhone.getDISPLAY());
+
+		if ((curDisplay >= (Display - (0.1 * offset))) && (curDisplay <= (Display + (0.1 * offset))))
+			return true;
+		else
+			return false;
+	}
+
+	public Boolean checkStorage(Phone curPhone, int offset) // +- 1 * offset
+	{
+		if (Storage == 0)
+			return true;
+		int curStorage = Integer.parseInt(curPhone.getSTORAGE());
+
+		if ((curStorage >= (Storage - (1 * offset))) && (curStorage <= (Storage + (1 * offset))))
+			return true;
+		else
+			return false;
+	}
+
+	public Boolean checkPrice(Phone curPhone, int offset) // +- 10000 * offset
+	{
+		if (Price == 0)
+			return true;
+		int curPrice = Integer.parseInt(curPhone.getPRICE());
+
+		if ((curPrice >= (Price - (10000 * offset))) && (curPrice <= (Price + (10000 * offset))))
+			return true;
+		else
+			return false;
+	}
+
+	public Boolean checkPerformance(Phone curPhone) // premium, normal
+	{
+		if ("".equals(Performance))
+			return true;
+		if (curPhone.getPERFORMANCE().equalsIgnoreCase(Performance))
+			return true;
+		else
+			return false;
+	}
+
+	public String getPerformance() {
+		return Performance;
+	}
+
+	public void setPerformance(String performance) {
+		Performance = performance;
+	}
+
+	public String getManufacture() {
+		return Manufacture;
+	}
+
+	public void setManufacture(String manufacture) {
+		Manufacture = manufacture;
+	}
+
+	public Phone_List getTotallist() {
+		return totallist;
+	}
+
+	public void setTotallist(Phone_List totallist) {
+		this.totallist = totallist;
+	}
+
+	public double getDisplay() {
+		return Display;
+	}
+
+	public void setDisplay(String display) {
+		if ("".equals(display))
+			Display = 0;
+		else
+			Display = Double.parseDouble(display);
+	}
+
+	public int getStorage() {
+		return Storage;
+	}
+
+	public void setStorage(String storage) {
+		if ("".equals(storage))
+			Storage = 0;
+		else
+			Storage = Integer.parseInt(storage);
+	}
+
+	public int getPrice() {
+		return Price;
+	}
+
+	public void setPrice(String price) {
+		if ("".equals(price))
+			Price = 0;
+		else
+			Price = Integer.parseInt(price);
+	}
+
+	public ArrayList<Phone> getRecommandlist() {
+		return recommandlist;
+	}
+
+	public void setRecommandlist(ArrayList<Phone> recommandlist) {
+		this.recommandlist = recommandlist;
+	}
+}

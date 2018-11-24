@@ -1,0 +1,64 @@
+package gui;
+
+package gui;
+
+import java.io.*;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Enumeration;
+import java.util.Scanner;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
+
+import common.gui.AbstractFrame;
+
+public class ChooseFrame extends AbstractFrame
+{
+	private Boolean STAT = false;
+	
+	public ChooseFrame(String mode) {
+		super(210, 103);
+
+		// 전체 Client UI의 폰트를 Times 일반, 크기는 20으로 설정
+		setUIFont(new FontUIResource(new Font("Times", Font.PLAIN, 20)));
+
+		JButton btnYES = new JButton("YES");
+		btnYES.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				setStat(true);
+			}
+		});
+		btnYES.setBounds(0, 0, 105, 35);
+		contentPane.add(btnYES);
+
+		JButton btnNO = new JButton("NO");
+		btnNO.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				setStat(false);
+			}
+		});
+		btnNO.setBounds(105, 0, 105, 35);
+		contentPane.add(btnNO);
+
+		setVisible(true);
+	}
+	
+	public void setStat(Boolean stat)
+	{
+		this.STAT = stat;
+	}
+	public Boolean getStat()
+	{
+		dispose();
+		return STAT;
+	}
+}
+	

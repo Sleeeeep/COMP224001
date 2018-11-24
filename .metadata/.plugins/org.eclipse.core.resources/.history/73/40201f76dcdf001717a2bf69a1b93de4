@@ -1,0 +1,140 @@
+package gui;
+
+import java.io.*;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Enumeration;
+import java.util.Scanner;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
+
+import common.gui.AbstractFrame;
+import seller.Seller;
+import buyer.*;
+
+public class LoginFrame extends AbstractFrame {
+	private Seller seller = new Seller();
+	private Buyer buyer = new Buyer();
+	private JTextField tfID;
+	private JPasswordField tfPW;
+	private JTextField tfNAME;
+
+	public LoginFrame(String mode) {
+		super(450, 270);
+
+		// 전체 Client UI의 폰트를 Times 일반, 크기는 20으로 설정
+		setUIFont(new FontUIResource(new Font("Times", Font.PLAIN, 20)));
+
+		if (mode.equals("S")) {
+			// 단순 Text 표시하는 객체(JLabel) 생성
+			setTitle("Seller");
+			JLabel lblID = new JLabel("ID");
+			lblID.setBounds(116, 55, 62, 18);
+			contentPane.add(lblID);
+
+			JLabel lblPW = new JLabel("PW");
+			lblPW.setBounds(116, 95, 62, 18);
+			contentPane.add(lblPW);
+
+			// Text 입력받을 수 있는 객체(JTextField) 생성
+			tfID = new JTextField();
+			tfID.setBounds(165, 49, 136, 30);
+			contentPane.add(tfID);
+			tfID.setColumns(10);
+
+			tfPW = new JPasswordField();
+			tfPW.setBounds(165, 89, 136, 30);
+			contentPane.add(tfPW);
+			tfPW.setColumns(10);
+
+			// 로그인
+			JButton btnSignin = new JButton("Sign in");
+			btnSignin.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					// 로그인 버튼이 눌렸을 때 수행
+					// TextField에서 입력된 ID와 PW를 가져와서 객체 생성
+					String inputID = tfID.getText();
+					String inputPW = tfPW.getText();
+					Scanner s = new Scanner(System.in);
+
+					if (!seller.CheckExistFile("SellerInfo"))
+						JOptionPane.showMessageDialog(LoginFrame.this, "No Seller info", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					else {
+						seller.getFile();
+						if (inputID.equals(seller.getID()) == true && inputPW.equals(seller.getPW()) == true) {
+							System.out.println("login success");
+							new MainFrame(seller);
+							dispose();
+						} else
+							JOptionPane.showMessageDialog(LoginFrame.this, "Invalid ID or PW", "Error",
+									JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			});
+			btnSignin.setBounds(82, 157, 105, 35);
+			contentPane.add(btnSignin);
+
+			// 처음 정보 생성
+			JButton btnRegister = new JButton("Register");
+			btnRegister.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if (seller.CheckExistFile("SellerInfo"))
+						JOptionPane.showMessageDialog(LoginFrame.this, "Already Seller info exist", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					// 회원가입 버튼이 눌렸을 때 수행
+					// ID와 PW를 입력받을 Dialog를 띄움
+					else {
+						String newID, newPW, newMK, newBN, newNAME;
+						newID = JOptionPane.showInputDialog("Please input your ID.");
+						if (newID != null) {
+							newPW = JOptionPane.showInputDialog("Please input your Password");
+							if (newPW != null) {
+								newMK = JOptionPane.showInputDialog("Please input Market info");
+								if (newMK != null) {
+									newNAME = JOptionPane.showInputDialog("Please input your Name");
+									if (newNAME != null) {
+										newBN = JOptionPane.showInputDialog("Please input your Business Number");
+										seller = new Seller(newNAME, newID, newPW, newMK, newBN);
+										seller.setFile(newID, newPW, newMK, newNAME, newBN);
+										JOptionPane.showMessageDialog(LoginFrame.this, "Success making SellerInfo",
+												"SellerInfo", JOptionPane.PLAIN_MESSAGE);
+									}
+								}
+							}
+						}
+					}
+				}
+			});
+			btnRegister.setBounds(212, 157, 130, 35);
+			contentPane.add(btnRegister);
+
+			setVisible(true);
+		} else if (mode.equals("B")) {
+			if (!buyer.CheckExistFile("SellerInfo"))
+				JOptionPane.showMessageDialog(LoginFrame.this, "No Seller info", "Error", JOptionPane.ERROR_MESSAGE);
+			else {
+				String NAME, AGE, PHONE;
+				NAME = JOptionPane.showInputDialog("Please input your NAME");
+				if (NAME != null) {
+					AGE = JOptionPane.showInputDialog("Please input your AGE");
+					if (AGE != null) {
+						PHONE = JOptionPane.showInputDialog("Please input your current phone");
+						if (PHONE != null) {
+							buyer = new Buyer(NAME, AGE, PHONE);
+							new MainFrame(buyer);
+						}
+					}
+				}
+			}
+		}
+	}
+}

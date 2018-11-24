@@ -1,0 +1,289 @@
+package callingplan;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class CallingPlan_List {
+	private ArrayList<CallingPlan> total_CallingPlan_list;
+	private ArrayList<CallingPlan> output_CallingPlan_list;
+	private CallingPlan thinkCallingPlan;
+	private String Path = "./CallingPlan/";
+	private String FILENAME = "CALLINGPLANINFO"
+	public CallingPlan_List()
+	{
+		
+	}
+	
+	public CallingPlan_List(int mode)
+	{
+		total_CallingPlan_list = new ArrayList<CallingPlan>();
+		
+		if (mode == 1)	//판매자에서 불러 왔을 때.
+		{
+			boolean check_dir;
+		
+			check_dir=CheckExistDir("CallingPlan");
+			
+			if(check_dir)
+			{
+				ReadFile_CallingPlanList();
+			}
+			else	//CallingPlan이라는 폴더 없을 때 생성.
+			{
+				File dir_phone = new File("CallingPlan");
+				if(!dir_phone.mkdirs())
+				{
+					System.err.println("MKDIR Error");
+				}	
+			}
+		}
+		else if(mode == 2)	//구매자에게서 불러 왔을 때. 
+		{
+			boolean check_dir;
+			
+			check_dir=CheckExistDir("CallingPlan");
+			
+			if(check_dir)
+			{
+				ReadFile_CallingPlanList();
+			}
+			else
+			{
+				System.out.println("요금제 목록 정보가 없습니다.");
+			}
+		}
+		else if(mode == 3)	//추천 클래스에서 만들었을 때.
+		{
+			
+		}
+		else
+		{
+			
+		}
+	}
+	
+	public void print_CallingPlan_List() //요금제 이름 목록으로 출력하고 목록 마지막에 상세검색선택하게 해놓음
+	{
+		int num;
+		
+		if(total_CallingPlan_list.isEmpty())
+		{
+			System.out.println("요금제 목록 정보가 없습니다.");
+		}
+		else
+		{
+			for(num=0;num < total_CallingPlan_list.size();num++)
+			{
+				CallingPlan printCallingPlan = total_CallingPlan_list.get(num);
+				System.out.println(num + ". " + printCallingPlan.getPAY_NAME());
+				num++;
+			}
+			System.out.println(num + ". 잘 모르겠다.(상세검색)");
+		}
+	}
+	
+	public int Get_Total_CallingPlan_List_Size() //요금제 목록 사이즈 리턴
+	{
+		return total_CallingPlan_list.size();
+	}
+	
+	public CallingPlan Get_SelectCallingPlan(int num) //요금제 목록 항목중 하나 선택해서 리턴
+	{
+		CallingPlan tempC = total_CallingPlan_list.get(num);
+		return tempC;
+	}
+	
+	public boolean CheckExistFile(String filename)
+	{
+		File file = new File(filename);
+		
+		boolean isExists = file.exists();
+		
+		return isExists;
+	}
+	
+	public boolean CheckExistDir(String dirname)
+	{
+		File dir = new File(dirname);
+		
+		boolean isExists = dir.isDirectory();
+		
+		return isExists;
+	}
+	public void insert_CallingPlan(String File)
+	{
+		Scanner s;
+		s = new Scanner(System.in);
+		
+		String PAY_NAME;	//index 1
+		System.out.print("PAY_NAME : ");
+		PAY_NAME = s.nextLine();
+		String MESSAGE;	//index 2
+		System.out.print("MESSAGE : ");
+		MESSAGE = s.nextLine();
+		String CALL;		//index 3
+		System.out.print("CALL : ");
+		CALL = s.nextLine();
+		String DATA;			//index 4
+		System.out.print("DATA : ");
+		DATA = s.nextLine();
+		String PRICE;		//index 5
+		System.out.print("PRICE : ");
+		PRICE = s.nextLine();
+		
+		try {
+			// 각 정보마다 NULL을 통해 구분시킴.
+			
+			FileOutputStream out = new FileOutputStream(Path+File);
+			
+			out.write(PAY_NAME.getBytes());
+			out.flush();
+			out.write('\n');
+			out.flush();
+			
+			out.write(MESSAGE.getBytes());
+			out.flush();
+			out.write('\n');
+			out.flush();
+			
+			out.write(CALL.getBytes());
+			out.flush();
+			out.write('\n');
+			out.flush();
+			
+			out.write(DATA.getBytes());
+			out.flush();
+			out.write('\n');
+			out.flush();
+			
+			out.write(PRICE.getBytes());
+			out.flush();
+			out.write('\n');
+			out.flush();
+			
+			out.close();
+		} catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	public void ReadFile_CallingPlanList()
+	{
+		if(!CheckExistFile(Path + "CallingPlanIndex"))
+		{
+			File file = new File(Path + "CallingPlanIndex");
+			try
+			{
+				file.createNewFile();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		try
+		{
+			FileInputStream fin = new FileInputStream(Path + "CallingPlanIndex");
+			Reader reader = new InputStreamReader(fin, "euc-kr"); 
+			BufferedReader in = new BufferedReader(reader);
+			Scanner s= new Scanner(System.in);
+			String PAY_NAME = "", MESSAGE = "", CALL = "", DATA = "", PRICE = "";
+			
+			char b;
+			String line="";
+			
+			int BUFFER_SIZE = 1000;
+			
+			in.mark(BUFFER_SIZE);
+			while((line=in.readLine()) != null)
+			{
+				//System.out.print(line);
+				in.reset();
+				
+				while((b = (char) in.read()) != '\0')
+				{
+					//System.out.print(b);
+					PAY_NAME += b;
+				}
+				
+				while((b = (char) in.read()) != '\0')
+				{
+					MESSAGE += b;
+				}
+				
+				while((b = (char) in.read()) != '\0')
+				{
+					CALL += b;
+				}
+				
+				while((b = (char) in.read()) != '\0')
+				{
+					DATA += b;
+				}
+				
+				while((b = (char) in.read()) != '\0')
+				{
+					PRICE += b;
+				}
+							
+				if((b = (char) in.read()) != 10)
+				{
+					System.out.println("Error");
+				}
+				in.mark(BUFFER_SIZE);
+				
+				CallingPlan temp = new CallingPlan(String PAY_NAME, String MESSAGE, String CALL,String DATA,String PRICE)
+				total_CallingPlan_list.add(inputData_CallingPlan(Path+serialNumber));
+				
+				PAY_NAME = "";
+				MESSAGE = "";
+				CALL = ""; 
+				DATA = ""; 
+				PRICE = "";
+			}
+			
+			fin.close();
+			in.close();
+			
+		} catch (IOException e) {	//존재여부 확인하고 와서 들어갈 일 없음.
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public ArrayList<CallingPlan> getTotal_CallingPlan_list() {
+		return total_CallingPlan_list;
+	}
+
+	public void setTotal_CallingPlan_list(ArrayList<CallingPlan> total_CallingPlan_list) {
+		this.total_CallingPlan_list = total_CallingPlan_list;
+	}
+
+	public ArrayList<CallingPlan> getOutput_CallingPlan_list() {
+		return output_CallingPlan_list;
+	}
+
+	public void setOutput_CallingPlan_list(ArrayList<CallingPlan> output_CallingPlan_list) {
+		this.output_CallingPlan_list = output_CallingPlan_list;
+	}
+
+	public CallingPlan getThinkCallingPlan() {
+		return thinkCallingPlan;
+	}
+
+	public void setThinkCallingPlan(CallingPlan thinkCallingPlan) {
+		this.thinkCallingPlan = thinkCallingPlan;
+	}
+	
+}

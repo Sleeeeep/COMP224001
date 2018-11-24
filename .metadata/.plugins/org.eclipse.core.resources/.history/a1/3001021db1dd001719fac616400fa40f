@@ -1,0 +1,53 @@
+package gui;
+
+import java.io.*;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Enumeration;
+import java.util.Scanner;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
+
+import common.gui.AbstractFrame;
+import info.User;
+
+public class SelectFrame extends AbstractFrame
+{
+	public SelectFrame()
+	{
+		super(450, 270);
+
+		// 전체 Client UI의 폰트를 Times 일반, 크기는 20으로 설정
+		setUIFont(new FontUIResource(new Font("Times", Font.PLAIN, 20)));
+		
+		JButton btnSeller = new JButton("Seller");
+		btnSeller.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				
+			}
+		}
+		btnSeller.setBounds(82, 157, 105, 35);
+		contentPane.add(btnSeller);
+		
+		JButton btnBuyer = new JButton("Seller");
+		btnBuyer.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				
+			}
+		}
+		btnBuyer.setBounds(82, 157, 105, 35);
+		contentPane.add(btnBuyer);
+	}
+}
+	

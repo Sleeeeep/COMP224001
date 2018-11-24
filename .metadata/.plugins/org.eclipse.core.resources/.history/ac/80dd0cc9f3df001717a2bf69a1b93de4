@@ -1,0 +1,45 @@
+package gui.buyer.tab;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.*;
+import callingplan.*;
+import phone.*;
+import common.*;
+import common.gui.AbstractFrame;
+
+public class additionalFrame extends AbstractFrame {
+	private Phone phone;
+	private CallingPlan callingplan;
+	
+	JPanel panel = new JPanel();
+	
+	public additionalFrame(Object datatype)
+	{
+		super(300, 300);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
+		if (datatype.getClass() == Phone.class)
+		{
+			phone = (Phone)datatype;
+			this.setTitle(phone.getMODEL_NAME());
+			
+			panel.add(new JLabel("asd"));
+			this.add(panel);
+		}
+		else if (datatype.getClass() == CallingPlan.class)
+		{
+			callingplan = (CallingPlan)datatype;
+			setTitle(callingplan.getPAY_NAME());
+			//LABEL.add(new JLabel("Pay Name" + " : " + callingplan.getPAY_NAME()));
+			
+	
+		}
+		
+		
+		
+		setVisible(true);
+	}
+
+}

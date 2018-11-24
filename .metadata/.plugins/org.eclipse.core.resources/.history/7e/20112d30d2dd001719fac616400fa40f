@@ -1,0 +1,118 @@
+package gui.tab;
+
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+
+import info.User;
+import seller.Seller;
+
+public class InfoTabPanel extends AbstractTabPanel {
+
+	private DefaultListModel listModel;
+	private JList list;
+	private Seller seller = new Seller();
+	
+	public InfoTabPanel(User user) {
+		super(user);
+		
+		// 사이즈 설정
+		setSize(new Dimension(panelWidth, panelHeight));
+		
+
+		JLabel lblTitle = new JLabel("Manage Info");
+		lblTitle.setFont(new Font("맑은 고딕", Font.BOLD, 30));
+		lblTitle.setBounds(40, 33, 240, 40);
+		add(lblTitle);
+		
+		
+		JLabel lblId = new JLabel("Select menu");
+		lblId.setBounds(40, 102, 180, 35);
+		add(lblId);
+		
+		// Scroll 가능한 List 보여주는 객체 생성 (ScrollPane 안에 JList 넣음
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(40, 150, 276, 194);
+		add(scrollPane);
+
+		if(user.getMode().equals("S") == true)
+		{
+			listModel = new DefaultListModel();
+			listModel.addElement("ID");
+			listModel.addElement("PW");
+			listModel.addElement("MARKET INFO");
+			listModel.addElement("NAME");
+			listModel.addElement("BUSINESS NUMBER");
+		}
+		else
+		{
+			listModel = new DefaultListModel();
+			listModel.addElement("나나나");
+		}
+	
+		JList list = new JList(listModel);
+		scrollPane.setViewportView(list);
+
+		
+		// 더블 클릭 시 정보 보여주도록 함
+		list.addMouseListener(new MouseAdapter() {
+		    public void mouseClicked(MouseEvent evt) {
+		        JList list = (JList) evt.getSource();
+		        
+		        // Double-click일 경우
+		        if (evt.getClickCount() == 2) {
+		        	// 클릭된 Index 가져옴
+		            int index = list.locationToIndex(evt.getPoint());
+		            
+		            String selected = (String) listModel.getElementAt(index);
+		            String msg = ""; 
+		            switch(index)
+		            {
+		            case 0:
+		            	msg = String.format("%s : %s", selected, seller.getID());
+		            	break;
+		            case 1:
+		            	msg = String.format("%s : %s", selected, seller.getPW());
+		            	break;
+		            case 2:
+		            	msg = String.format("%s : %s", selected, seller.getMarketInfo());
+		            	break;
+		            case 3:
+		            	msg = String.format("%s : %s", selected, seller.getSellerInfo());
+		            	break;
+		            case 4:
+		            	msg = String.format("%s : %s", selected, seller.getBusinessNumber());
+		            default:
+		            	break;
+		            }
+		            
+		            String temp = JOptionPane.showInputDialog(InfoTabPanel.this, msg, selected, JOptionPane.INFORMATION_MESSAGE, null, temp, "input to change");
+		        }
+		    }
+		});
+	}
+	
+	
+	public JList getList() {
+		return list;
+	}
+
+	public void setList(JList list) {
+		this.list = list;
+	}
+
+	public DefaultListModel getListModel() {
+		return listModel;
+	}
+
+	public void setListModel(DefaultListModel listModel) {
+		this.listModel = listModel;
+	}
+}
