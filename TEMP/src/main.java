@@ -7,6 +7,7 @@ import gui.SelectFrame;
 public class main {
 	// test
 	public static void main(String[] args) throws IOException {
-		SelectFrame mainframe = new SelectFrame();
+		SelectFrame mainframe = new SelectFrame(); 
+
 	}
 }
